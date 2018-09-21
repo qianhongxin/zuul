@@ -84,7 +84,7 @@ public class ZuulFilterPoller {
         public void run() {
             while (running) {
                 try {
-
+                    //金丝雀网关执行逻辑
                     if (canary.get()) {
                         HashMap<String, FilterInfo> setFilters = new HashMap<String, FilterInfo>();
 
@@ -104,6 +104,7 @@ public class ZuulFilterPoller {
                         for (FilterInfo next : setFilters.values()) {
                             doFilterCheck(next);
                         }
+                        //正常网关执行逻辑
                     } else if (active.get()) {
                         List<FilterInfo> newFilters = dao.getAllActiveFilters();
                         if (newFilters == null) continue;
@@ -117,6 +118,7 @@ public class ZuulFilterPoller {
                 }
 
                 try {
+                    //睡眠INTERVAL秒
                     sleep(INTERVAL);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

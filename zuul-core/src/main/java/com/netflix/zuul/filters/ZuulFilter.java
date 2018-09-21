@@ -29,8 +29,10 @@ import rx.Observable;
  */
 public interface ZuulFilter<I extends ZuulMessage, O extends ZuulMessage> extends ShouldFilter<I>
 {
+    //是否启用
     boolean isDisabled();
 
+    //过滤器名字
     String filterName();
 
     /**
@@ -39,6 +41,7 @@ public interface ZuulFilter<I extends ZuulMessage, O extends ZuulMessage> extend
      *
      * @return the int order of a filter
      */
+    //过滤器的执行顺序，用int值表示
     int filterOrder();
 
     /**
@@ -47,6 +50,7 @@ public interface ZuulFilter<I extends ZuulMessage, O extends ZuulMessage> extend
      *
      * @return FilterType
      */
+    //过滤器类型，in，out，end
     FilterType filterType();
 
     /**

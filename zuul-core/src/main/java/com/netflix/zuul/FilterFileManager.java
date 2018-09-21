@@ -106,15 +106,16 @@ public class FilterFileManager {
         stopPoller();
     }
 
-
+    //停止扫描grovy脚本文件夹，停止过滤器加载操作
     void stopPoller() {
         bRunning = false;
     }
 
+    //间隔扫描指定文件夹，利用grovy编译器动态编译grovy脚本为class，并加入过滤器集合供zuul使用
     void startPoller() {
         poller = new Thread("GroovyFilterFileManagerPoller") {
             public void run() {
-                while (bRunning) {
+                while (bRunning) { //为flase时结束循环扫描操作，线程被回收
                     try {
                         sleep(config.getPollingIntervalSeconds() * 1000);
                         manageFiles();
@@ -197,8 +198,8 @@ public class FilterFileManager {
     void manageFiles()
     {
         try {
-            List<File> aFiles = getFiles();
-            processGroovyFiles(aFiles);
+            List<File> aFiles = getFiles(); //获取文件
+            processGroovyFiles(aFiles); //执行编译
         }
         catch (Exception e) {
             String msg = "Error updating groovy filters from disk!";
@@ -208,6 +209,9 @@ public class FilterFileManager {
     }
 
 
+    /**
+     * 过滤器文件管理的配置信息，包括文件位置，扫描时间等
+     */
     public static class FilterFileManagerConfig
     {
         private String[] directories;

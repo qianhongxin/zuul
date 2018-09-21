@@ -29,5 +29,7 @@ public interface ShouldFilter<T extends ZuulMessage>
      *
      * @return true if the apply() method should be invoked. false will not invoke the apply() method
      */
+    //根据返回值，判断这个filter是否能被执行，这个条件可以很灵活
+    //条件可以是当前用户是否是测试用户来进行金丝雀发布等
     boolean shouldFilter(T msg);
 }

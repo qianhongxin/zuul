@@ -24,17 +24,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Representation of a ZuulFilter for representing and storing in a database
  */
+//这里用的是Cassandra数据库，该实体对应数据库中的表，保存的是filter信息。实现了comparable接口
 @ThreadSafe
 public class FilterInfo implements  Comparable<FilterInfo>{
 
     private final String filter_id;
-    private final String filter_name;
-    private final String filter_code;
-    private final FilterType filter_type;
+    private final String filter_name; //过滤器名字
+    private final String filter_code; //过滤器源码，一般是grovvy代码
+    private final FilterType filter_type; //过滤器类型，in，out，end
     private final String filter_disablePropertyName;
-    private final String filter_order;
-    private final String application_name;
-    private int revision;
+    private final String filter_order; //过滤器执行顺序
+    private final String application_name; //过滤器属于哪个zuul应用
+    private int revision; //过滤器版本，对同一条记录，更新的时候回更新version，这样同一分代码，如果version不同，该过滤器会被更新
     private Date creationDate;
     /* using AtomicBoolean so we can pass it into EndpointScriptMonitor */
     private final AtomicBoolean isActive = new AtomicBoolean();
@@ -204,6 +205,7 @@ public class FilterInfo implements  Comparable<FilterInfo>{
      * @param filter_name
      * @return key is application_name:filter_name:filter_type
      */
+    //过滤器名字构造规则： application_name:filter_name:filter_type，zuul应用名：过滤器名：过滤器类型
     public static String buildFilterID(String application_name, FilterType filter_type, String filter_name) {
         return application_name + ":" + filter_name + ":" + filter_type.toString();
     }
@@ -243,6 +245,7 @@ public class FilterInfo implements  Comparable<FilterInfo>{
     @Override
     public int compareTo(FilterInfo filterInfo) {
         if(filterInfo.getFilterName().equals(this.getFilterName())){
+            //如果过滤器名字相同，根据创建时间区分是否相等
             return filterInfo.creationDate.compareTo(getCreationDate());
         }
         return filterInfo.getFilterName().compareTo(this.getFilterName());
