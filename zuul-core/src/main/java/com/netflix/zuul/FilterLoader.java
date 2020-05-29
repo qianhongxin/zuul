@@ -50,6 +50,7 @@ import static org.mockito.Mockito.when;
  *         Time: 1:59 PM
  */
 public class FilterLoader {
+    //创建FilterLoader实例
     final static FilterLoader INSTANCE = new FilterLoader();
 
     private static final Logger LOG = LoggerFactory.getLogger(FilterLoader.class);
@@ -59,10 +60,13 @@ public class FilterLoader {
     private final ConcurrentHashMap<String, String> filterCheck = new ConcurrentHashMap<String, String>();
     private final ConcurrentHashMap<String, List<ZuulFilter>> hashFiltersByType = new ConcurrentHashMap<String, List<ZuulFilter>>();
 
+    //获取filter容器
     private FilterRegistry filterRegistry = FilterRegistry.instance();
 
+    //动态语言编译器，编译成class字节么
     static DynamicCodeCompiler COMPILER;
-    
+
+    //过滤器创建工厂
     static FilterFactory FILTER_FACTORY = new DefaultFilterFactory();
 
     /**

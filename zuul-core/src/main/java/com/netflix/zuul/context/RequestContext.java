@@ -54,6 +54,13 @@ import com.netflix.zuul.util.DeepCopy;
  *         Date: 10/13/11
  *         Time: 10:21 AM
  */
+
+/**
+ * 请求上下文保存ZuulFilters访问和共享的请求，响应，状态信息和数据。
+ * RequestContext在请求期间存在，并且是ThreadLocal。
+ * 可以通过设置contextClass来替换RequestContext的扩展名。
+ * 这里的大多数方法都是方便的包装方法; RequestContext是ConcurrentHashMap 的扩展
+ */
 public class RequestContext extends ConcurrentHashMap<String, Object> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RequestContext.class);

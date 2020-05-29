@@ -44,6 +44,10 @@ import static org.mockito.Mockito.*;
  *         Date: 12/23/11
  *         Time: 10:44 AM
  */
+
+/**
+ * zuul1.x的启动入口是基于servlet，2.x是基于Netty的server
+ */
 public class ZuulServlet extends HttpServlet {
 
     private static final long serialVersionUID = -3374242278843351500L;
@@ -60,6 +64,14 @@ public class ZuulServlet extends HttpServlet {
         zuulRunner = new ZuulRunner(bufferReqs);
     }
 
+    /**
+     * 执行zuulServlet时，需要处理
+     *
+     * @param servletRequest
+     * @param servletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void service(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse) throws ServletException, IOException {
         try {
@@ -67,24 +79,30 @@ public class ZuulServlet extends HttpServlet {
 
             // Marks this request as having passed through the "Zuul engine", as opposed to servlets
             // explicitly bound in web.xml, for which requests will not have the same data attached
+            //将此请求标记为已通过“Zuul引擎”，而不是在web.xml中显式绑定的servlet，请求将不会附加相同的数据
             RequestContext context = RequestContext.getCurrentContext();
             context.setZuulEngineRan();
 
             try {
+                //执行前置过滤器
                 preRoute();
             } catch (ZuulException e) {
                 error(e);
+                //执行后置过滤器
                 postRoute();
                 return;
             }
             try {
+                //执行路由过滤器
                 route();
             } catch (ZuulException e) {
                 error(e);
+                //执行后置过滤器
                 postRoute();
                 return;
             }
             try {
+                //执行后置过滤器
                 postRoute();
             } catch (ZuulException e) {
                 error(e);

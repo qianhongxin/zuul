@@ -145,6 +145,12 @@ public class FilterProcessor {
      * @return
      * @throws Throwable throws up an arbitrary exception
      */
+    /**
+     * 根据过滤器类型查找所有过滤器，并循环依次执行。（如果返回的是bool值，进行"或"操作）
+     * @param sType
+     * @return
+     * @throws Throwable
+     */
     public Object runFilters(String sType) throws Throwable {
         if (RequestContext.getCurrentContext().debugRouting()) {
             Debug.addRoutingDebug("Invoking {" + sType + "} type filters");
