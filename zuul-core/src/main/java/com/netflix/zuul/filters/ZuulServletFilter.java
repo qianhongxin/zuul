@@ -47,6 +47,7 @@ import static org.mockito.Mockito.*;
  *         Date: 10/12/11
  *         Time: 2:54 PM
  */
+// 也可以作为启动入口，默认用ZuulServlet作为启动入口，二选一的
 public class ZuulServletFilter implements Filter {
 
     private ZuulRunner zuulRunner;
@@ -65,8 +66,10 @@ public class ZuulServletFilter implements Filter {
         try {
             init((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
             try {
+                // 执行所有preRoute过滤器
                 preRouting();
             } catch (ZuulException e) {
+                // 如果任意一个preRoute过滤器失败，则执行error过滤器和postRoute过滤器
                 error(e);
                 postRouting();
                 return;
@@ -79,21 +82,26 @@ public class ZuulServletFilter implements Filter {
             }
             
             try {
+                // pre过滤器执行成功，则执行routing过滤器
                 routing();
             } catch (ZuulException e) {
+                // 如果routing过滤器中任意一个失败，则执行error过滤器和postRouteing过滤器
                 error(e);
                 postRouting();
                 return;
             }
             try {
+                // 上面都成功，则执行postRouting过滤器
                 postRouting();
             } catch (ZuulException e) {
+                // 任意一个执行失败，则执行error过滤器
                 error(e);
                 return;
             }
         } catch (Throwable e) {
             error(new ZuulException(e, 500, "UNCAUGHT_EXCEPTION_FROM_FILTER_" + e.getClass().getName()));
         } finally {
+            // 释放当前请求的上下文
             RequestContext.getCurrentContext().unset();
         }
     }
@@ -124,6 +132,7 @@ public class ZuulServletFilter implements Filter {
     }
 
 
+    // 单元测试类
     @RunWith(MockitoJUnitRunner.class)
     public static class UnitTest {
 

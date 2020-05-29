@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
  */
 
 /**
- * zuul1.x的启动入口是基于servlet，2.x是基于Netty的server
+ * zuul1.x的启动入口默认是基于servlet（也可以用ZuulServletFilter），2.x是基于Netty的server
  */
 public class ZuulServlet extends HttpServlet {
 
@@ -81,12 +81,14 @@ public class ZuulServlet extends HttpServlet {
             // explicitly bound in web.xml, for which requests will not have the same data attached
             //将此请求标记为已通过“Zuul引擎”，而不是在web.xml中显式绑定的servlet，请求将不会附加相同的数据
             RequestContext context = RequestContext.getCurrentContext();
+            // 设置启动标示
             context.setZuulEngineRan();
 
             try {
                 //执行前置过滤器
                 preRoute();
             } catch (ZuulException e) {
+                // 任意一个preRoute执行出错，都执行error过滤器
                 error(e);
                 //执行后置过滤器
                 postRoute();
@@ -96,6 +98,7 @@ public class ZuulServlet extends HttpServlet {
                 //执行路由过滤器
                 route();
             } catch (ZuulException e) {
+                // 任意一个route执行出错，都执行error过滤器
                 error(e);
                 //执行后置过滤器
                 postRoute();
@@ -105,6 +108,7 @@ public class ZuulServlet extends HttpServlet {
                 //执行后置过滤器
                 postRoute();
             } catch (ZuulException e) {
+                // 任意一个postRoute执行出错，都执行error过滤器
                 error(e);
                 return;
             }
@@ -112,6 +116,7 @@ public class ZuulServlet extends HttpServlet {
         } catch (Throwable e) {
             error(new ZuulException(e, 500, "UNHANDLED_EXCEPTION_" + e.getClass().getName()));
         } finally {
+            // 释放当前请求的上下文
             RequestContext.getCurrentContext().unset();
         }
     }
