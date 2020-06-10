@@ -49,6 +49,7 @@ import static org.mockito.Mockito.when;
  *         Date: 11/3/11
  *         Time: 1:59 PM
  */
+// 提供过滤器加载，解析，并加入容器等的功能
 public class FilterLoader {
     //创建FilterLoader实例
     final static FilterLoader INSTANCE = new FilterLoader();

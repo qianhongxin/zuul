@@ -46,6 +46,7 @@ import static org.mockito.Mockito.*;
  */
 public class FilterProcessor {
 
+    // 单例模式
     static FilterProcessor INSTANCE = new FilterProcessor();
     protected static final Logger logger = LoggerFactory.getLogger(FilterProcessor.class);
 
@@ -156,10 +157,12 @@ public class FilterProcessor {
             Debug.addRoutingDebug("Invoking {" + sType + "} type filters");
         }
         boolean bResult = false;
+        // 拿到sType的所有过滤器
         List<ZuulFilter> list = FilterLoader.getInstance().getFiltersByType(sType);
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 ZuulFilter zuulFilter = list.get(i);
+                // 执行过滤器
                 Object result = processZuulFilter(zuulFilter);
                 if (result != null && result instanceof Boolean) {
                     bResult |= ((Boolean) result);
@@ -195,7 +198,8 @@ public class FilterProcessor {
                 Debug.addRoutingDebug("Filter " + filter.filterType() + " " + filter.filterOrder() + " " + filterName);
                 copy = ctx.copy();
             }
-            
+
+            // 执行过滤器逻辑
             ZuulFilterResult result = filter.runFilter();
             ExecutionStatus s = result.getStatus();
             execTime = System.currentTimeMillis() - ltime;

@@ -51,6 +51,7 @@ import static org.mockito.Mockito.*;
 public class ZuulServlet extends HttpServlet {
 
     private static final long serialVersionUID = -3374242278843351500L;
+    // 封装filter执行的入口，门面模式
     private ZuulRunner zuulRunner;
 
 
@@ -75,6 +76,7 @@ public class ZuulServlet extends HttpServlet {
     @Override
     public void service(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse) throws ServletException, IOException {
         try {
+            // 将本次请求的request和response设置到当前servlet关联的zuulRunner中
             init((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
 
             // Marks this request as having passed through the "Zuul engine", as opposed to servlets

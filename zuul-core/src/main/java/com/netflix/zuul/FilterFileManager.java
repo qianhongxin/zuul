@@ -104,6 +104,8 @@ public class FilterFileManager {
             public void run() {
                 while (bRunning) {
                     try {
+                        // 定时轮询，加载磁盘上由groovy写的过滤器，然后过期FilterProcessor的hashFiltersByType，
+                        // 并将新的过滤器加入到FilterProcessor的filterRegistry
                         sleep(pollingIntervalSeconds * 1000);
                         manageFiles();
                     } catch (Exception e) {
