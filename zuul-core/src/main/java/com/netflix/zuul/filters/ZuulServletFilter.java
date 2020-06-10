@@ -48,6 +48,7 @@ import static org.mockito.Mockito.*;
  *         Time: 2:54 PM
  */
 // 也可以作为启动入口，默认用ZuulServlet作为启动入口，二选一的
+// spring cloud zuul继承该类，来启动zuul的
 public class ZuulServletFilter implements Filter {
 
     private ZuulRunner zuulRunner;
