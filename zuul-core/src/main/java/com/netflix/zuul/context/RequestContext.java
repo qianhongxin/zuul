@@ -59,7 +59,8 @@ import com.netflix.zuul.util.DeepCopy;
  * 请求上下文保存ZuulFilters访问和共享的请求，响应，状态信息和数据。
  * RequestContext在请求期间存在，并且是ThreadLocal。
  * 可以通过设置contextClass来替换RequestContext的扩展名。
- * 这里的大多数方法都是方便的包装方法; RequestContext是ConcurrentHashMap 的扩展
+ * 这里的大多数方法都是方便的包装方法; RequestContext是 ConcurrentHashMap 的扩展，因为RequestContext是请求上下文，
+ * 有些共享的变量需要在多个请求中共享，所以这些通过ConcurrentHashMap存放
  */
 public class RequestContext extends ConcurrentHashMap<String, Object> {
 
