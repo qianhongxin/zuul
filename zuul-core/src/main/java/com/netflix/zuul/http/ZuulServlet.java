@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
  */
 
 /**
- * zuul1.x的启动入口默认是基于servlet（也可以用ZuulServletFilter），2.x是基于Netty的server
+ * zuul1.x的访问入口默认是基于servlet（也可以用ZuulServletFilter），2.x是基于Netty的server
  */
 public class ZuulServlet extends HttpServlet {
 
